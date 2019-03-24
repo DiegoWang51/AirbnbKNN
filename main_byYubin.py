@@ -16,6 +16,28 @@ Created on Thu Mar 17
 
 """
 
+#可视化函数
+def viz(knn,score):
+    viz_flag=1
+    if(viz_flag==True):
+        import matplotlib.pyplot as plt
+        
+    #    string='security_deposit'
+    #    plt.scatter(AirbnbKNN_y,house_features[string])
+    #    plt.xlabel("Nightly Price")
+    #    plt.ylabel(string.replace('_', ' ')) 
+        
+        plt.scatter(knn.predict(X_test),y_test)
+        plt.xlabel("Predict")
+        plt.ylabel("Correct") 
+        plt.title("score is "+str(score))
+        ##string='accommodates'
+        ##plt.scatter(AirbnbKNN_y,house_features[string])
+        ##plt.xlabel("Nightly Price")
+        ##plt.ylabel(string.replace('_', ' ')) #数据预处理,去掉逗号
+    
+        plt.show()
+
 #读入数据
 import pandas as pd
 import numpy as np
@@ -61,8 +83,6 @@ house_features=house_features.dropna(subset=['host_acceptance_rate']) #去除未
 del house_features['city'] #去除重复信息
 del house_features['zipcode']
 del house_features['state']
-
-#test
 del house_features['minimum_nights']
 del house_features['maximum_nights']
 del house_features['host_listings_count']
@@ -72,10 +92,12 @@ del house_features['bedrooms']
 del house_features['beds']
 del house_features['host_response_rate']
 del house_features['host_acceptance_rate']
+#del house_features['latitude']
+#del house_features['longitude']
 
+#产生KNN输入
 house_features=house_features.fillna(0) #补充 cleaning fee等列的nan
-
-AirbnbKNN_X = house_features #产生KNN输入
+AirbnbKNN_X = house_features 
 AirbnbKNN_y = np.array(house_features['price'])
 del AirbnbKNN_X['price']
 AirbnbKNN_X = np.array(AirbnbKNN_X)
@@ -87,45 +109,27 @@ from sklearn import preprocessing
 min_max_scaler = preprocessing.MinMaxScaler()
 AirbnbKNN_X = min_max_scaler.fit_transform(AirbnbKNN_X)
 
-#数据切分
-from sklearn.model_selection import train_test_split 
-X_train,X_test,y_train,y_test = train_test_split(AirbnbKNN_X,AirbnbKNN_y,test_size = 0.3)
 
-#训练模型
+
+#数据切分，训练模型，用训练好的模型进行预测,并对预测好坏进行评估
+from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
-knn = KNeighborsRegressor(n_neighbors=5) #定义用sklearn中的KNN分类算法 
-knn.fit(X_train,y_train)
+knn = KNeighborsRegressor(n_neighbors=20) #定义用sklearn中的KNN分类算法 
+total_score=0.0
+trial_number=200
+for i in range(trial_number):
+    X_train,X_test,y_train,y_test = train_test_split(AirbnbKNN_X,AirbnbKNN_y,test_size = 0.3)
+    knn.fit(X_train,y_train)
+    #print(knn.predict(X_test))   #这里的knn就是已经train好了的knn
+    #print(y_test)    # 对比真实值
+    score = knn.score(X_test,y_test)
+    total_score += score
+    ##print(house_features.iloc[0])
+    ##print(house_features.iloc[0])
+    ##print(AirbnbKNN_X)
+    ##print(AirbnbKNN_y)
+    if(i==0):
+        viz(knn,score)
+avg_score=total_score/trial_number
+print("The average score of "+str(trial_number)+" times is "+str(avg_score))
 
-# 用训练好的模型进行分类
-#print(knn.predict(X_test))   #这里的knn就是已经train好了的knn
-#print(y_test)    # 对比真实值
-print(knn.score(X_test,y_test)) #输出模型准确率 
-
-
-
-##print(house_features.iloc[0])
-##print(house_features.iloc[0])
-##print(AirbnbKNN_X)
-##print(AirbnbKNN_y)
-
-
-#可视化
-viz_flag=1
-if(viz_flag==True):
-    import matplotlib.pyplot as plt
-    
-#    string='security_deposit'
-#    plt.scatter(AirbnbKNN_y,house_features[string])
-#    plt.xlabel("Nightly Price")
-#    plt.ylabel(string.replace('_', ' ')) 
-    
-    plt.scatter(knn.predict(X_test),y_test)
-    plt.xlabel("Predict")
-    plt.ylabel("Correct") 
-    
-    ##string='accommodates'
-    ##plt.scatter(AirbnbKNN_y,house_features[string])
-    ##plt.xlabel("Nightly Price")
-    ##plt.ylabel(string.replace('_', ' ')) #数据预处理,去掉逗号
-
-    plt.show()
