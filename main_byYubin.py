@@ -73,6 +73,9 @@ del house_features['beds']
 del house_features['host_response_rate']
 del house_features['host_acceptance_rate']
 
+del house_features['longitude']
+del house_features['latitude']
+
 house_features=house_features.fillna(0) #补充 cleaning fee等列的nan
 
 AirbnbKNN_X = house_features #产生KNN输入
