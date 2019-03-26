@@ -156,4 +156,6 @@ plt.ylabel('Average KNN Scores')
 plt.savefig('scaler graphs/all transaction scalers')
 plt.clf()
 
+plt.show()
+
 print('\n', transactionScores)
