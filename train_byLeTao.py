@@ -109,13 +109,13 @@ for testIteration in range(10):
         # print(knnP.score(XPS_test, yP_test))
         pricingScores[scalerIndex] += knnP.score(XPS_test, yP_test)
 
-        # plt.scatter(knnP.predict(XPS_test), np.array(yP_test))
-        # plt.title('Prediction on Pricing using Normalization of {}'.format(scaler))
-        # plt.xlabel('Predicted Pricing Price')
-        # plt.ylabel('Actual Pricing Price')
-        # plt.figtext(0.6, 0.8, 'KNN Score: {}'.format(round(knnP.score(XPS_test, yP_test), 3)))
-        # plt.savefig('scaler graphs/{} Prediction'.format(scaler))
-        # plt.clf()
+        plt.scatter(knnP.predict(XPS_test), np.array(yP_test))
+        plt.title('Prediction on Pricing using Normalization of {}'.format(scaler))
+        plt.xlabel('Predicted Pricing Price')
+        plt.ylabel('Actual Pricing Price')
+        plt.figtext(0.6, 0.8, 'KNN Score: {}'.format(round(knnP.score(XPS_test, yP_test), 3)))
+        plt.savefig('scaler graphs/{} Prediction'.format(scaler))
+        plt.clf()
 
         knnT = KNeighborsRegressor(n_neighbors = 20)
         knnT.fit(XTS_train, yT_train)
@@ -125,13 +125,13 @@ for testIteration in range(10):
         # print(knnT.score(XTS_test, yT_test))
         transactionScores[scalerIndex] += knnT.score(XTS_test, yT_test)
 
-        # plt.scatter(knnP.predict(XTS_test), np.array(yT_test))
-        # plt.title('Prediction on Transaction using Normalization of {}'.format(scaler))
-        # plt.xlabel('Predicted Transaction Price')
-        # plt.ylabel('Actual Transaction Price')
-        # plt.figtext(0.6, 0.8, 'KNN Score: {}'.format(round(knnT.score(XTS_test, yT_test), 3)))
-        # plt.savefig('scaler graphs/{} Transaction'.format(scaler))
-        # plt.clf()
+        plt.scatter(knnP.predict(XTS_test), np.array(yT_test))
+        plt.title('Prediction on Transaction using Normalization of {}'.format(scaler))
+        plt.xlabel('Predicted Transaction Price')
+        plt.ylabel('Actual Transaction Price')
+        plt.figtext(0.6, 0.8, 'KNN Score: {}'.format(round(knnT.score(XTS_test, yT_test), 3)))
+        plt.savefig('scaler graphs/{} Transaction'.format(scaler))
+        plt.clf()
 
     print(transactionScores)
 
@@ -155,4 +155,5 @@ plt.xlabel('Type of Scalers')
 plt.ylabel('Average KNN Scores')
 plt.savefig('scaler graphs/all transaction scalers')
 plt.clf()
-# Why such much random error in knn.score?
+
+print('\n', transactionScores)
